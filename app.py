@@ -28,17 +28,34 @@ if st.button("Generate Bill", type="primary"):
         if consumed_current < 0:
             st.error("The current reading cannot be less than the previous reading.")
         else:
-            # Multi-tier slab billing logic
-            if consumed_current < 200:
-                final_amount = consumed_current * 0
-            elif consumed_current < 400:
-                final_amount = consumed_current * 5
-            elif consumed_current < 600:
-                final_amount = consumed_current * 8
-            elif consumed_current < 800:
-                final_amount = consumed_current * 11
+            final_amount = 0.0
+            
+            # Condition 1: If consumed units are less than 500 (First 200 units free)
+            if consumed_current < 500:
+                billable_units = max(0.0, consumed_current - 200)
+                # Apply rates for units above 200 up to 400 and 400-500
+                if billable_units <= 200:
+                    final_amount = billable_units * 4.50
+                else:
+                    final_amount = (200 * 4.50) + ((billable_units - 200) * 6.30)
+            
+            # Condition 2: If consumed units are 500 or more (Only first 100 units free)
             else:
-                final_amount = consumed_current * 13
+                billable_units = max(0.0, consumed_current - 100)
+                
+                # Calculating slab by slab for accuracy
+                if billable_units <= 300: # 101 to 400 range
+                    final_amount = billable_units * 4.50
+                elif billable_units <= 400: # up to 500
+                    final_amount = (300 * 4.50) + ((billable_units - 300) * 6.30)
+                elif billable_units <= 500: # up to 600
+                    final_amount = (300 * 4.50) + (100 * 6.30) + ((billable_units - 400) * 8.40)
+                elif billable_units <= 700: # up to 800
+                    final_amount = (300 * 4.50) + (100 * 6.30) + (100 * 8.40) + ((billable_units - 500) * 9.45)
+                elif billable_units <= 900: # up to 1000
+                    final_amount = (300 * 4.50) + (100 * 6.30) + (100 * 8.40) + (200 * 9.45) + ((billable_units - 700) * 10.50)
+                else: # above 1000
+                    final_amount = (300 * 4.50) + (100 * 6.30) + (100 * 8.40) + (200 * 9.45) + (200 * 10.50) + ((billable_units - 900) * 11.55)
 
             # Bill Report Display
             st.subheader("📋 BILL REPORT")
