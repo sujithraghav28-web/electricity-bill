@@ -35,7 +35,7 @@ if st.button("Generate Bill", type="primary"):
                 billable_units = max(0.0, consumed_current - 200)
                 # Apply rates for units above 200 up to 400 and 400-500
                 if billable_units <= 200:
-                    final_amount = billable_units * 4.50
+                    final_amount = billable_units * 4.70
                 else:
                     final_amount = (200 * 4.50) + ((billable_units - 200) * 6.30)
             
