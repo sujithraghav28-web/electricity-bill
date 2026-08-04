@@ -13,4 +13,4 @@ jobs:
       - name: Send request to Streamlit app
         run: |
 
-https://electricity-bill-jayljdr9quqjc2lwnfffu5.streamlit.app/
+  curl -Ihttps://electricity-bill-jayljdr9quqjc2lwnfffu5.streamlit.app/
